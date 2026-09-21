@@ -1,0 +1,147 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_videoreview/view
+}}
+<div class="videoreview-view">
+    <div class="mb-4">
+        <h2 class="h3">{{name}}</h2>
+        {{#hasintro}}
+            <div class="videoreview-intro">{{{intro}}}</div>{{/hasintro}}
+    </div>
+
+    {{#canviewall}}
+        <section class="mb-4">
+            <h3 class="h5">{{#str}} management, videoreview {{/str}}</h3>
+            <div class="videoreview-management-grid">
+                <a class="btn btn-outline-secondary" href="{{{criteriaurl}}}">{{#str}}
+                    managecriteria, videoreview {{/str}}</a>
+                {{#submissionmode}}<a class="btn btn-outline-secondary" href="{{{allocationsurl}}}">{{#str}}
+                    manageallocations, videoreview {{/str}}</a>{{/submissionmode}}
+                <a class="btn btn-outline-secondary" href="{{{reporturl}}}">{{#str}}
+                    viewreport, videoreview {{/str}}</a>
+            </div>
+        </section>
+    {{/canviewall}}
+
+    {{#commonmode}}
+        <section class="card mb-4">
+            <div class="card-body">
+                <h3 class="h5">{{#str}} commonvideoevaluation, videoreview {{/str}}</h3>
+                <p>{{#str}} commonvideoevaluationhelp, videoreview {{/str}}</p>
+                {{#canreview}}<a class="btn btn-primary" href="{{{reviewcommonurl}}}">{{#str}}
+                    reviewvideo, videoreview {{/str}}</a>{{/canreview}}
+            </div>
+        </section>
+    {{/commonmode}}
+
+    {{#submissionmode}}
+        {{#cansubmit}}
+            <section class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div>
+                            <h3 class="h5 mb-1">{{#str}} mysubmission, videoreview {{/str}}</h3>
+                            {{#hassubmission}}
+                                <div>{{submissiontitle}}</div>
+                                <small class="text-muted">{{#str}}
+                                    modified, videoreview {{/str}}: {{submissionmodified}}</small>
+                            {{/hassubmission}}
+                            {{^hassubmission}}<p class="text-muted mb-0">{{#str}}
+                                nosubmissionyet, videoreview {{/str}}</p>{{/hassubmission}}
+                        </div>
+                        <a class="btn btn-primary" href="{{{submissionurl}}}">{{#hassubmission}}{{#str}}
+                            editsubmission, videoreview {{/str}}{{/hassubmission}}{{^hassubmission}}{{#str}}
+                            submitvideo, videoreview {{/str}}{{/hassubmission}}</a>
+                    </div>
+                </div>
+            </section>
+        {{/cansubmit}}
+
+        {{#hasallocations}}
+            <section class="mb-4">
+                <h3 class="h5">{{#str}} reviewstocomplete, videoreview {{/str}}</h3>
+                <div class="videoreview-card-grid">
+                    {{#allocations}}
+                        <article class="videoreview-review-card">
+                            <strong>{{title}}</strong>
+                            <div class="text-muted small">{{author}}</div>
+                            {{#completed}}
+                                <div class="text-success mt-2">{{#str}}
+                                    reviewcompleted, videoreview {{/str}} · {{score}}%
+                                </div>{{/completed}}
+                            {{^completed}}
+                                <div class="text-warning mt-2">{{#str}}
+                                    reviewpending, videoreview {{/str}}</div>{{/completed}}
+                            <a class="btn btn-sm btn-outline-primary mt-2" href="{{{url}}}">{{#str}}
+                                openreview, videoreview {{/str}}</a>
+                        </article>
+                    {{/allocations}}
+                </div>
+            </section>
+        {{/hasallocations}}
+
+        {{#cansubmit}}
+            <section class="mb-4">
+                <h3 class="h5">{{#str}} receivedreviews, videoreview {{/str}}</h3>
+                {{^released}}
+                    <div class="alert alert-info">{{#str}}
+                        reviewsavailableon, videoreview {{/str}} {{releasedate}}</div>
+                {{/released}}
+                {{#released}}
+                    {{^hasreceivedreviews}}<p class="text-muted">{{#str}}
+                        noreviewsreceived, videoreview {{/str}}</p>{{/hasreceivedreviews}}
+                    <div class="videoreview-card-grid">
+                        {{#receivedreviews}}
+                            <article class="videoreview-review-card">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <strong>{{reviewer}}</strong>
+                                    <span class="videoreview-score-badge">{{score}}%</span>
+                                </div>
+                                <small class="text-muted">{{timesubmitted}}</small>
+                                {{#overallfeedback}}
+                                    <div class="mt-2">{{{overallfeedback}}}</div>{{/overallfeedback}}
+                                <div class="mt-3"><a class="btn btn-sm btn-outline-primary" href="{{{url}}}">{{#str}}
+                                    viewreviewwithvideo, videoreview {{/str}}</a></div>
+                            </article>
+                        {{/receivedreviews}}
+                    </div>
+                {{/released}}
+            </section>
+        {{/cansubmit}}
+
+        {{#canviewall}}
+            <section class="mb-4">
+                <h3 class="h5">{{#str}} studentsubmissions, videoreview {{/str}}</h3>
+                {{^hasteachersubmissions}}
+                    <p class="text-muted">{{#str}} nosubmissions, videoreview {{/str}}</p>{{/hasteachersubmissions}}
+                <div class="videoreview-card-grid">
+                    {{#teachersubmissions}}
+                        <article class="videoreview-review-card">
+                            <strong>{{title}}</strong>
+                            <div class="text-muted small">{{author}}</div>
+                            <div class="small mt-2">{{#str}}
+                                reviewsreceivedcount, videoreview {{/str}}: {{reviewcount}}</div>
+                            <a class="btn btn-sm btn-outline-primary mt-2" href="{{{url}}}">{{#str}}
+                                reviewvideo, videoreview {{/str}}</a>
+                        </article>
+                    {{/teachersubmissions}}
+                </div>
+            </section>
+        {{/canviewall}}
+    {{/submissionmode}}
+</div>

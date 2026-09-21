@@ -1,0 +1,97 @@
+.videoreview-player-wrap {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #000;
+    border-radius: .5rem;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+}
+
+.videoreview-player {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+    background: #000;
+}
+
+.videoreview-youtube iframe {
+    width: 100%;
+    height: 100%;
+}
+
+.videoreview-comment {
+    display: flex;
+    gap: .6rem;
+    align-items: baseline;
+    padding: .55rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+}
+
+.videoreview-timecode {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.videoreview-comment-text {
+    flex: 1;
+    white-space: pre-wrap;
+}
+
+.videoreview-management-grid,
+.videoreview-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.videoreview-review-card {
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: .5rem;
+    padding: 1rem;
+    background: var(--bs-body-bg, #fff);
+}
+
+.videoreview-score-badge {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.videoreview-report-table {
+    min-width: 880px;
+}
+
+.videoreview-comment-timeline {
+    position: relative;
+    height: 18px;
+}
+
+.videoreview-comment-timeline-track {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    left: 0;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--bs-border-color, #dee2e6);
+}
+
+.videoreview-comment-marker {
+    position: absolute;
+    top: 3px;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    transform: translateX(-50%);
+    border: 2px solid var(--bs-body-bg, #fff);
+    border-radius: 50%;
+    background: var(--bs-primary, #0d6efd);
+    cursor: pointer;
+}
+
+.videoreview-comment-marker:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}

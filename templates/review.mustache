@@ -1,0 +1,128 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_videoreview/review
+}}
+<div class="videoreview-review" data-region="videoreview-review" data-config="{{configjson}}">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h2 class="h3 mb-1">{{#str}} reviewvideo, videoreview {{/str}}</h2>
+            <div class="text-muted">{{videotitle}}</div>
+        </div>
+        {{#submitted}}
+            <span class="badge badge-success">{{#str}} submitted, videoreview {{/str}} · {{score}}%</span>
+        {{/submitted}}
+    </div>
+
+    {{> mod_videoreview/player }}
+
+    <div class="videoreview-comment-timeline mt-2" data-region="comment-timeline" role="group"
+         aria-label="{{#str}} commenttimeline, videoreview {{/str}}">
+        <div class="videoreview-comment-timeline-track"></div>
+        {{#comments}}
+            <button type="button" class="videoreview-comment-marker" data-action="seek" data-time="{{timecode}}"
+                    data-comment-marker-id="{{id}}" title="{{timeformatted}}" aria-label="{{timeformatted}}"></button>
+        {{/comments}}
+    </div>
+
+    <div class="videoreview-progress mt-2 mb-4">
+        <div class="d-flex justify-content-between small">
+            <span>{{#str}} viewingprogress, videoreview {{/str}}</span>
+            <span data-region="progress-percent">0%</span>
+        </div>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="progress-bar" data-region="progress-bar" style="width:0%"></div>
+        </div>
+    </div>
+
+    <section class="card mb-4">
+        <div class="card-body">
+            <h3 class="h5">{{#str}} timestampedcomments, videoreview {{/str}}</h3>
+            <p class="text-muted">{{#str}} timestampedcommentshelp, videoreview {{/str}}</p>
+            <form data-region="comment-form" class="mb-3">
+                <div class="form-group">
+                    <label for="videoreview-comment-input">{{#str}} comment, videoreview {{/str}}</label>
+                    <textarea id="videoreview-comment-input" class="form-control" data-region="comment-input" rows="2"
+                              placeholder="{{#str}} commentplaceholder, videoreview {{/str}}"></textarea>
+                </div>
+                <button type="submit" class="btn btn-secondary">{{#str}} addcomment, videoreview {{/str}}</button>
+            </form>
+            <ul class="list-unstyled videoreview-comments" data-region="comments">
+                {{#comments}}
+                    <li class="videoreview-comment" data-comment-id="{{id}}">
+                        <button type="button" class="btn btn-link p-0 videoreview-timecode" data-action="seek"
+                                data-time="{{timecode}}">{{timeformatted}}</button>
+                        <span class="videoreview-comment-text">{{{comment}}}</span>
+                        <button type="button" class="btn btn-sm btn-link text-danger" data-action="delete-comment"
+                                data-comment-id="{{id}}">{{#str}} deletecomment, videoreview {{/str}}</button>
+                    </li>
+                {{/comments}}
+            </ul>
+            {{^hascomments}}<p class="text-muted" data-region="no-comments">{{#str}}
+                nocommentsyet, videoreview {{/str}}</p>{{/hascomments}}
+        </div>
+    </section>
+
+    <form method="post" class="videoreview-criteria-form">
+        <input type="hidden" name="sesskey" value="{{sesskey}}">
+        <input type="hidden" name="submitreview" value="1">
+        <section class="card mb-4">
+            <div class="card-body">
+                <h3 class="h5">{{#str}} assessmentcriteria, videoreview {{/str}}</h3>
+                {{^hascriteria}}
+                    <div class="alert alert-info">{{#str}} nocriteria, videoreview {{/str}}</div>
+                {{/hascriteria}}
+                {{#criteria}}
+                    <div class="videoreview-criterion border-bottom py-3">
+                        <label class="font-weight-bold d-block" for="criterion-{{id}}">{{name}}{{#required}}
+                            <span class="text-danger">*</span>{{/required}}</label>
+                        {{#description}}<p class="text-muted mb-2">{{{description}}}</p>{{/description}}
+                        {{#isscore}}
+                            <div class="input-group" style="max-width:16rem">
+                                <input id="criterion-{{id}}" name="criterion_{{id}}" class="form-control" type="number"
+                                       min="0" max="{{maxscore}}" step="0.01" value="{{scorevalue}}"
+                                       {{#required}}required{{/required}}>
+                                <div class="input-group-append"><span class="input-group-text">/ {{maxscore}}</span>
+                                </div>
+                            </div>
+                        {{/isscore}}
+                        {{#isconcept}}
+                            <select id="criterion-{{id}}" name="criterion_{{id}}" class="form-control"
+                                    style="max-width:28rem" {{#required}}required{{/required}}>
+                                <option value="">{{#str}} selectconcept, videoreview {{/str}}</option>
+                                {{#options}}
+                                    <option value="{{value}}"
+                                            {{#selected}}selected{{/selected}}>{{label}}</option>{{/options}}
+                            </select>
+                        {{/isconcept}}
+                        <label class="mt-2 small" for="feedback-{{id}}">{{#str}}
+                            criterionfeedback, videoreview {{/str}}</label>
+                        <textarea id="feedback-{{id}}" name="feedback_{{id}}" class="form-control"
+                                  rows="2">{{feedback}}</textarea>
+                    </div>
+                {{/criteria}}
+                <div class="form-group mt-3">
+                    <label for="videoreview-overall-feedback" class="font-weight-bold">{{#str}}
+                        overallfeedback, videoreview {{/str}}</label>
+                    <textarea id="videoreview-overall-feedback" name="overallfeedback" class="form-control"
+                              rows="4">{{overallfeedback}}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">{{#str}} submitreview, videoreview {{/str}}</button>
+            </div>
+        </section>
+    </form>
+</div>
