@@ -95,3 +95,16 @@
     outline: 2px solid currentColor;
     outline-offset: 2px;
 }
+/* Let the main review player use the full width and cover API-generated direct iframes. */
+.videoreview-player-wrap {
+    width: 100%;
+    max-width: none;
+    margin-inline: 0;
+}
+
+.videoreview-player-wrap > iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
