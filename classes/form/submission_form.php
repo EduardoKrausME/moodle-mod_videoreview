@@ -43,7 +43,6 @@ class submission_form extends \moodleform {
 
         $mform->addElement('filemanager', 'submissionvideo', get_string('submissionvideo', 'videoreview'), null, [
             'subdirs' => 0,
-            'maxfiles' => 1,
             'accepted_types' => ['video'],
         ]);
         $mform->hideIf('submissionvideo', 'videosource', 'neq', 'upload');
@@ -72,6 +71,15 @@ class submission_form extends \moodleform {
             $info = $draftid > 0 ? file_get_draft_area_info($draftid) : ['filecount' => 0];
             if (empty($info['filecount'])) {
                 $errors['submissionvideo'] = get_string('submissionvideorequired', 'videoreview');
+            }
+        }
+        foreach (['submissionvideo'] as $field) {
+            $draftid = (int)($data[$field] ?? 0);
+            if ($draftid > 0) {
+                $draftinfo = file_get_draft_area_info($draftid);
+                if ((int)$draftinfo['filecount'] > 1) {
+                    $errors[$field] = get_string('errormaxfiles', 'videoreview');
+                }
             }
         }
         return $errors;

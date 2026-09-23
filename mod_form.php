@@ -45,7 +45,7 @@ class mod_videoreview_mod_form extends moodleform_mod {
         $mform->addRule('name', null, 'required', null, 'client');
         $this->standard_intro_elements();
 
-        $mform->addElement('header', 'videoconfiguration', get_string('videoconfiguration', 'videoreview'));
+        $mform->addElement('html', '<h3>' . get_string('videoconfiguration', 'videoreview') . '</h3>');
         $mform->addElement('select', 'videomode', get_string('videomode', 'videoreview'), [
             'common' => get_string('videomodecommon', 'videoreview'),
             'submission' => get_string('videomodesubmission', 'videoreview'),
@@ -59,7 +59,7 @@ class mod_videoreview_mod_form extends moodleform_mod {
         $mform->setDefault('commonvideosource', 'upload');
         $mform->hideIf('commonvideosource', 'videomode', 'neq', 'common');
 
-        $fileoptions = ['subdirs' => 0, 'maxfiles' => 1, 'accepted_types' => ['video']];
+        $fileoptions = ['subdirs' => 0, 'accepted_types' => ['video']];
         $mform->addElement('filemanager', 'commonvideo', get_string('commonvideo', 'videoreview'), null, $fileoptions);
         $mform->hideIf('commonvideo', 'videomode', 'neq', 'common');
         $mform->hideIf('commonvideo', 'commonvideosource', 'neq', 'upload');
@@ -70,7 +70,7 @@ class mod_videoreview_mod_form extends moodleform_mod {
         $mform->hideIf('commonvideourl', 'commonvideosource', 'neq', 'url');
         $mform->addHelpButton('commonvideourl', 'videourl', 'videoreview');
 
-        $mform->addElement('header', 'peerreviewsettings', get_string('peerreviewsettings', 'videoreview'));
+        $mform->addElement('html', '<h3>' . get_string('peerreviewsettings', 'videoreview') . '</h3>');
         $mform->addElement('text', 'peerreviewcount', get_string('peerreviewcount', 'videoreview'), ['size' => 5]);
         $mform->setType('peerreviewcount', PARAM_INT);
         $mform->setDefault('peerreviewcount', 2);
@@ -190,6 +190,15 @@ class mod_videoreview_mod_form extends moodleform_mod {
         }
         if (isset($data['peerreviewcount']) && ((int)$data['peerreviewcount'] < 0 || (int)$data['peerreviewcount'] > 50)) {
             $errors['peerreviewcount'] = get_string('invalidpeerreviewcount', 'videoreview');
+        }
+        foreach (['commonvideo'] as $field) {
+            $draftid = (int)($data[$field] ?? 0);
+            if ($draftid > 0) {
+                $draftinfo = file_get_draft_area_info($draftid);
+                if ((int)$draftinfo['filecount'] > 1) {
+                    $errors[$field] = get_string('errormaxfiles', 'videoreview');
+                }
+            }
         }
         return $errors;
     }
