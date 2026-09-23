@@ -57,10 +57,10 @@ class save_progress extends external_api {
      * @return array
      */
     public static function execute(
-        int    $cmid,
-        int    $submissionid,
-        float  $duration,
-        float  $position,
+        int $cmid,
+        int $submissionid,
+        float $duration,
+        float $position,
         string $segmentsjson
     ): array {
         global $DB, $USER;
