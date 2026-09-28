@@ -163,6 +163,10 @@ function videoreview_grade_item_update($activity, $grades = null): int {
     ];
     if ($activity->videomode !== 'submission') {
         $params['hidden'] = 1;
+    } else {
+        // The Grade API uses the hidden field itself as the "hidden until" timestamp.
+        // Passing a separate hiddenuntil key would be ignored by grade_update().
+        $params['hidden'] = !empty($activity->releasedate) ? (int)$activity->releasedate : 0;
     }
     return grade_update(
         'mod/videoreview',

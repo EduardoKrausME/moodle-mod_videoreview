@@ -86,20 +86,26 @@ class backup_videoreview_activity_structure_step extends backup_activity_structu
 
         $activity->set_source_table('videoreview', ['id' => backup::VAR_ACTIVITYID]);
         $criterion->set_source_table('videoreview_criterion', ['videoreviewid' => backup::VAR_PARENTID]);
-        $submission->set_source_table('videoreview_submission', ['videoreviewid' => backup::VAR_PARENTID]);
-        $allocation->set_source_table('videoreview_allocation', ['videoreviewid' => backup::VAR_PARENTID]);
-        $review->set_source_table('videoreview_review', ['videoreviewid' => backup::VAR_PARENTID]);
-        $score->set_source_table('videoreview_score', ['reviewid' => backup::VAR_PARENTID]);
-        $comment->set_source_table('videoreview_comment', ['reviewid' => backup::VAR_PARENTID]);
-        $progress->set_source_table('videoreview_progress', ['videoreviewid' => backup::VAR_PARENTID]);
 
-        $submission->annotate_ids('user', 'userid');
-        $allocation->annotate_ids('user', 'reviewerid');
-        $review->annotate_ids('user', 'reviewerid');
-        $progress->annotate_ids('user', 'userid');
+        // Learner submissions, allocations, reviews and progress are user data and must not be
+        // included in course copies, imports or backups created without user information.
+        if ($this->get_setting_value('userinfo')) {
+            $submission->set_source_table('videoreview_submission', ['videoreviewid' => backup::VAR_PARENTID]);
+            $allocation->set_source_table('videoreview_allocation', ['videoreviewid' => backup::VAR_PARENTID]);
+            $review->set_source_table('videoreview_review', ['videoreviewid' => backup::VAR_PARENTID]);
+            $score->set_source_table('videoreview_score', ['reviewid' => backup::VAR_PARENTID]);
+            $comment->set_source_table('videoreview_comment', ['reviewid' => backup::VAR_PARENTID]);
+            $progress->set_source_table('videoreview_progress', ['videoreviewid' => backup::VAR_PARENTID]);
+
+            $submission->annotate_ids('user', 'userid');
+            $allocation->annotate_ids('user', 'reviewerid');
+            $review->annotate_ids('user', 'reviewerid');
+            $progress->annotate_ids('user', 'userid');
+            $submission->annotate_files('mod_videoreview', 'submissionvideo', 'id');
+        }
+
         $activity->annotate_files('mod_videoreview', 'intro', null);
         $activity->annotate_files('mod_videoreview', 'commonvideo', null);
-        $submission->annotate_files('mod_videoreview', 'submissionvideo', 'id');
 
         return $this->prepare_activity_structure($activity);
     }
