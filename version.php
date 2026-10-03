@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2026092801;
-$plugin->release = '1.0.3';
+$plugin->version = 2026100300;
+$plugin->release = '1.0.4';
 $plugin->component = 'mod_videoreview';
 $plugin->requires = 2024042200;
 $plugin->maturity = MATURITY_STABLE;
