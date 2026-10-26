@@ -23,10 +23,6 @@ assigned peers.
 
 Moodle 4.4 or later.
 
-## Installation
-
-Copy the `videoreview` directory to `mod/videoreview` and complete Moodle's upgrade process.
-
 ## License
 
 GNU GPL v3 or later.
